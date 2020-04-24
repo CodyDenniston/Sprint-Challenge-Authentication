@@ -14,6 +14,15 @@ describe('server', function () {
 					expect(res.status).toBe(200);
 				});
 		});
+		it('should return api up', function () {
+			// make a GET request to / endpoint on the server
+			return request(server) // return the async call to let jest know it should wait
+				.get('/')
+				.then(res => {
+					// assert that the HTTP status code is 200
+					expect(res.body.api).toBe('up');
+				});
+		});
 	});
 
 	describe('POST /register', function () {
@@ -52,6 +61,34 @@ describe('server', function () {
 				.send({ username: 'Shrek', password: 'isLove&life' })
 				.then(res => {
 					expect(res.status).toBe(200);
+				});
+		});
+		it('returns welcome message', function () {
+			return request(server)
+				.post('/api/auth/login')
+				.send({ username: 'Shrek', password: 'isLove&life' })
+				.then(res => {
+					expect(res.body.message).toBe('Welcome!');
+				});
+		});
+	});
+	describe('GET /jokes', function () {
+		it('should return status 200', function () {
+			// make a GET request to / endpoint on the server
+			request(server) // return the async call to let jest know it should wait
+				.get('/api/jokes')
+				.then(res => {
+					// assert that the HTTP status code is 200
+					expect(res.status).toBe(200);
+				});
+		});
+		it('should return something in postman', function () {
+			// make a GET request to / endpoint on the server
+			request(server) // return the async call to let jest know it should wait
+				.get('/api/jokes')
+				.then(res => {
+					// assert that the HTTP status code is 200
+					expect(res.body).toBeTruthy();
 				});
 		});
 	});
